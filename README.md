@@ -1,4 +1,3 @@
-# Send_Files_To_Server
 Android Studio file written in Kotlin.
 
 Sends pictures to server for creating randomly generated accounts. Pictures are seperate and must
