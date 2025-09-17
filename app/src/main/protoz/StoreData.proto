@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package storedata;
+
+message StoreDataRequest{
+  string first_name = 1;
+  string last_name = 2;
+  string phone_number = 3;
+}
+
+message StoreDataResponse{
+  string response = 1;
+}
+
+service StoreDataService{
+  rpc StoreDataRPC(StoreDataRequest) returns (StoreDataResponse) {}
+}

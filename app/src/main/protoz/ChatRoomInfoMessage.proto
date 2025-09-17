@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option java_package = "chatroominfo";
+
+//shared enum used on server and client, shows state of a specific account inside of a chat room
+//WARNING: be careful about changing these values, it will screw with the server values presently stored inside database
+enum AccountStateInChatRoom {
+    ACCOUNT_STATE_IS_ADMIN = 0; //account is inside chat room and is admin
+    ACCOUNT_STATE_BANNED = 1; //account is not inside chat room and is banned
+    ACCOUNT_STATE_IN_CHAT_ROOM = 2; //account is inside chat room
+    ACCOUNT_STATE_NOT_IN_CHAT_ROOM = 3; //account has left chat room
+}
+
+//represents a single chat room
+message ChatRoomInfoMessage {
+    string chat_room_id = 1;
+    string chat_room_name = 2;
+    string chat_room_password = 3;
+    AccountStateInChatRoom account_state = 4; //account state of calling account
+    int64 time_user_joined = 5; //the time this user joined the chat room
+    int64 last_activity_time = 6; //the last time a chat message was sent in this chat room
+    repeated ChatRoomMemberInfoMessage members = 7;
+}
+
+//represents the info of a single member/account of a chat room
+message ChatRoomMemberInfoMessage {
+    string account_oid = 1;
+    string account_name = 2;
+    bytes account_thumbnail = 3;
+    int32 account_thumbnail_size = 4;
+    AccountStateInChatRoom account_state = 5; //account state of requested account
+}

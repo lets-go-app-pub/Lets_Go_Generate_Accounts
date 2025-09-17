@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package bi_di_test;
+
+enum MessageInstruction {
+  PRIMER = 0; //the first message sent to 'prime' the loop
+  CHAT_MESSAGE = 1;
+  LOCATION_MESSAGE = 2;
+  KICKED_FROM_CHAT_ROOM = 3;
+  BANNED_FROM_CHAT_ROOM = 4;
+  INVITE_TO_CHAT_ROOM = 5;
+  USER_JOINED_CHAT_ROOM = 6;
+}
+
+message TypeOfMessage {
+
+  MessageInstruction message_type = 1;
+
+  string chat_room_id = 2; //chat room the action took place in
+
+  //chat message
+  string chat_message = 3;
+
+  //location
+  double longitude = 4;
+  double latitude = 5;
+
+  //kicked or banned from chat room
+  //invite to chat room
+  //user joined to chat room
+  string account_id = 6; //the account id of the user which this message is about
+
+}
+
+message BiDiRequest {
+  string request = 1;
+
+    TypeOfMessage type = 2;
+}
+
+message BiDiResponse {
+  string response = 1;
+}
+
+service BiDiService {
+
+  rpc BiDiRPC(stream BiDiRequest) returns (stream BiDiResponse) {}
+}

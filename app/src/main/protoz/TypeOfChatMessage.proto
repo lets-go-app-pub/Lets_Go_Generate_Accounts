@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option java_package = "type_of_chat_message";
+
+import "ChatRoomInfoMessage.protoz";
+
+//NOTE: these are used to identify chat message types on the server  (CHAT_ROOM_MESSAGE_TYPE) and client (MessagesDataEntity, messageType), be careful about modifying them
+enum MessageInstruction {
+  CHAT_TEXT_MESSAGE = 0;
+  PICTURE_MESSAGE = 1;
+  LOCATION_MESSAGE = 2;
+  MESSAGE_EDITED = 3;
+  MESSAGE_DELETED = 4;
+  USER_KICKED_FROM_CHAT_ROOM = 5;
+  USER_BANNED_FROM_CHAT_ROOM = 6;
+  INVITE_TO_CHAT_ROOM = 7;
+  USER_JOINED_CHAT_ROOM = 8;
+  USER_LEFT_CHAT_ROOM = 9;
+  USER_THUMBNAIL_UPDATED = 10;
+  INITIAL_ADD_CHAT_ROOM = 11; //sent when stream is started to send any new chat rooms the user is part of
+  INITIAL_REMOVE_CHAT_ROOM = 12; //sent when stream is started to send any chat rooms the user is no longer part of
+}
+
+message TypeOfChatMessage {
+
+  MessageInstruction message_type = 1;
+
+  string chat_room_id = 2; //chat room the action took place in
+
+  //chat message
+  string chat_message = 3;
+
+  //if message is reply
+  bool is_reply = 4; //if this is a reply to a message will be set to true, otherwise false
+  string reply_is_from_oid = 5; //if is_reply is true, this will be the oid of the message
+
+  //if message is deleted
+  bool is_deleted = 6;
+
+  //location
+  double longitude = 7;
+  double latitude = 8;
+
+  //picture OID
+  string picture_oid = 9;
+
+  //kicked or banned from chat room
+  //invite to chat room
+  string account_id = 10; //the account id of the user which this message is about
+
+  //thumbnail updated
+  //user joined chat
+  ChatRoomMemberInfoMessage member_info = 11;
+
+  //initial add chat room
+  //initial remove chat room
+  ChatRoomInfoMessage chat_room = 12;
+}

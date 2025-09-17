@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package findmatches;
+
+import "StatusEnum.protoz";
+import "CategoryTimeFrame.protoz";
+
+//picture specific response
+message PictureMessage {
+
+  bytes file_in_bytes = 1; //the bytes for the file itself
+  int32 file_size = 2; //the size of the file, used to check for corrupted data
+}
+
+message FindMatchesRequest {
+
+  string logged_in_token = 1; //the log in account ID
+  double lets_go_version = 2; //pass current version of app
+
+  int32 number_messages = 3; //the server will have a max size of messages, this is just for older version support
+
+  double client_latitude = 4; //the latitude used to run the algorithm for the client
+  double client_longitude = 5; //the longitude used to run the algorithm for the client
+}
+
+message SingleMatchMessage {
+
+  enum SuccessTypes {
+      UNKNOWN = 0;
+      SUCCESSFULLY_EXTRACTED = 1;
+      NO_MATCHES_FOUND = 2;
+      MATCH_ALGORITHM_ON_COOL_DOWN = 3;
+      NO_SWIPES_REMAINING = 4;
+  }
+
+  ReturnStatus return_status = 1; //enum for status of response
+  SuccessTypes success_type = 2; //false means no matches were found for this account with the given criteria
+  string match_account_id = 3; //used when returning this account to server (matching account id)
+  string verified_account_id = 4; //used when returning this account to server (matching account id)
+  repeated PictureMessage picture = 5; //these will be by far the bulk of the message
+  string name = 6;
+  int32 age = 7;
+  int32 gender = 8; //1 for male, 2 for female, 3 for gender_other
+  string gender_other = 9; //this will only be displayed if the person is gender other
+  string city_name = 10;
+  double distance = 11;
+  string bio = 12;
+  double point_value = 13;
+  int64 expiration_time = 14; //used on android side to know when match has 'expired'
+  bool other_user_match = 15; //this will be true if another user swiped yes on this person to inject it into the queue
+  repeated CategoryActivityMessage activities = 16; //NOTE: -1 will be used to signify an element that starts 'NOW'
+                                                    //NOTE: this array can be empty which will mean 'anytime'
+  int32 swipes_remaining = 17; //number of swipes remaining after this message occurs
+  int64 swipes_time_before_reset = 18; //the amount of time before the swipes will be reset
+                                       //NOTE: not the actual time they will be reset but the number of seconds until a reset will occur
+}
+
+message FindMatchesResponse {
+  ReturnStatus return_status = 1; //enum for status of response
+  repeated SingleMatchMessage matches= 2; //the matches information
+  int32 number_of_matches = 3;
+}
+
+service FindMatchesService {
+  rpc FindMatchRPC(FindMatchesRequest) returns (stream SingleMatchMessage) {}
+}

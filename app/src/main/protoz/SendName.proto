@@ -1,0 +1,17 @@
+syntax  = "proto3";
+
+package sendname;
+
+message SendNameRequest{
+  string first_name = 1;
+}
+
+message SendNameResponse{
+  string first = 1;
+  string last = 2;
+  string phone = 3;
+}
+
+service SendNameService{
+  rpc SendNameRPC(SendNameRequest) returns (SendNameResponse) {}
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package phonelogin;
+
+//send ~ for the empty string values instead of leaving them empty to tell
+message PhoneLoginRequest{
+  string phone_number = 1; //pass phone number to log in with
+  string device_id = 2; //pass current device ID
+  double lets_go_version = 3; //pass current version of app
+}
+
+//send ~ for the empty values instead of leaving them empty to tell
+//use -1 for empty integer
+message PhoneLoginResponse{
+
+  enum Status {
+    CONNECTION_ERROR = 0; //this is the default value and should only be set if a failure in gRPC occurred
+    LOGGED_IN = 1; //successfully logged in token is returned in login_token
+    REQUIRES_AUTHENTICATION = 2; //redirect to enter code for SMS verification function
+    OUTDATED_VERSION = 3; //outdated version of app used refuse to allow login
+    SMS_ON_COOL_DOWN = 4; //sms has some time remaining will be stored in sms_cool_down
+    NEED_MORE_INFO = 5; //need more user info before can log in
+    INVALID_PHONE_NUMBER = 6; //invalid phone number passed
+    INVALID_DEVICE_ID = 7; //invalid device ID passed
+    UNKNOWN = 8; //this means the login function didn't set it
+    LG_ERROR = 9; //might want to try logging in again for this
+  }
+
+  Status status = 1; //enum for status of response
+  string login_token = 2; //login token, used for querying server
+  int32 sms_cool_down = 3; //will be -1 unless the SMS_ON_COOL_DOWN was returned to status
+
+}
+
+service PhoneLoginService{
+  //attempts to log the user in
+  rpc PhoneLoginRPC(PhoneLoginRequest) returns (PhoneLoginResponse) {}
+}

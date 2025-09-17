@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package senderrortoserver;
+
+message SendErrorRequest {
+  string error_message = 1;
+  string collection_name = 2;
+  double lets_go_version = 3;
+}
+
+message SendErrorResponse {
+  enum Status {
+    CONNECTION_ERROR = 0;
+    SUCCESSFUL = 1;
+    OUTDATED_VERSION = 2;
+    FAIL = 3;
+  }
+  Status return_status = 1;
+}
+
+service SendErrorService {
+  rpc SendErrorRPC(SendErrorRequest) returns (SendErrorResponse) {};
+}

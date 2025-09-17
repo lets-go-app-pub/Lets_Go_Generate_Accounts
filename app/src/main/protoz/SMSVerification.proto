@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package smsverification;
+
+//send ~ for the empty string values instead of leaving them empty to tell
+message SMSVerificationRequest{
+  string phone_number = 1; //pass phone number to log in with
+  string verification_code = 2; //verification code to create account
+  double lets_go_version = 3; //pass current version of app
+}
+
+//send ~ for the empty values instead of leaving them empty to tell
+//use -1 for empty integer
+message SMSVerificationResponse{
+
+  enum Status {
+    CONNECTION_ERROR = 0; //this is the default value and should only be set if a failure in gRPC occurred
+    SUCCESS = 1; //successfully created account or updated existing account
+    OUTDATED_VERSION = 2; //outdated version of app used refuse to allow login
+    VERIFICATION_CODE_EXPIRED= 3; //sms has some time remaining will be stored in sms_cool_down
+    INVALID_PHONE_NUMBER = 4; //invalid phone number passed
+    UNKNOWN = 5; //this means the login function didn't set it
+    LG_ERROR = 6; //might want to try logging in again for this
+  }
+
+  Status status = 1; //enum for status of response
+
+}
+
+service  SMSVerificationService{
+  rpc SMSVerificationRPC(SMSVerificationRequest) returns (SMSVerificationResponse) {}
+}

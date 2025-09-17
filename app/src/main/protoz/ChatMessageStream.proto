@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package grpc_stream_chat;
+
+import "TypeOfChatMessage.protoz";
+
+message ChatToServerRequest {
+
+  string logged_in_token = 1; //the log in account ID
+  double lets_go_version = 2; //pass current version of app
+
+  int64 time_last_message_received = 3; //timestamp that the last message was received
+
+  bool account_just_logging_in = 4; //this will be set to true on the first time servers are requested and false all other times
+                                    //it is used to update the chat rooms this account is initially in
+
+  repeated string chat_room_ids = 5; //chat room ids client has stored
+}
+
+message StreamChatToClient {
+
+  //NOTE: not used when sending a chat room back
+  string message_oid = 1; //the message ID (OID on server of document)
+  int64 timestamp_stored = 2; //used to show time the timestamp was stored in the server
+
+  string sent_by_account_id = 3; //account id which sent this message
+  TypeOfChatMessage message = 4; //message info;
+}
+
+service StreamChatService {
+
+  rpc StreamChatRPC(ChatToServerRequest) returns (stream StreamChatToClient) {}
+}

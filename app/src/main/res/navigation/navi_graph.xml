@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_graph"
+    app:startDestination="@id/enterInfo">
+
+    <fragment
+        android:id="@+id/enterInfo"
+        android:name="site.lets_go_support.send_files_to_server.EnterInfo"
+        android:label="fragment_enter_info"
+        tools:layout="@layout/fragment_enter_info" >
+        <action
+            android:id="@+id/action_enterInfo_to_getInfo"
+            app:destination="@id/getInfo"
+            app:popUpTo="@id/getInfo"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/getInfo"
+        android:name="site.lets_go_support.send_files_to_server.GetInfo"
+        android:label="fragment_get_info"
+        tools:layout="@layout/fragment_get_info" >
+        <action
+            android:id="@+id/action_getInfo_to_enterInfo"
+            app:destination="@id/enterInfo"
+            app:popUpTo="@id/enterInfo"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

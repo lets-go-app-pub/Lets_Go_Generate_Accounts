@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package getdatapackage;
+
+message GetDataRequest{
+  string first_name = 1;
+  string last_name = 2;
+  string phone_number = 3;
+}
+
+message GetDataResponse{
+  string response = 1;
+}
+
+service GetDataService{
+  rpc GetDataRPC(GetDataRequest) returns (GetDataResponse) {}
+}
