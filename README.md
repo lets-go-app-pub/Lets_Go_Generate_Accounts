@@ -61,7 +61,7 @@ Small Android/Kotlin utility that **crops, compresses, and uploads images** to t
 ---
 
 ## Notes & good practices
-- **Test data only:** images are stock/sample photos shipped with the app. No real user data.  
+- **Test data only:** images are stock/sample photos used for testing purposes. No real user data.  
 - **Wait-for-ready / retries:** consider enabling gRPC’s wait-for-ready or backoff if you extend this tool.  
 - **Production apps shouldn’t ship seeds:** this project is for **internal testing** and portfolio purposes.
 
